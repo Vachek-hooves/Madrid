@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, SafeAreaView } from 'react-native';
 
 const puzzleImage = require('../assets/image/puzzle/culture.png');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -10,9 +10,23 @@ const PUZZLE_WIDTH = PUZZLE_HEIGHT * (9 / 16);
 const TabTestPuzzle = () => {
   const [pieces, setPieces] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     createPuzzlePieces();
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          setGameOver(true);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const createPuzzlePieces = () => {
@@ -60,8 +74,17 @@ const TabTestPuzzle = () => {
     return pieces.every((piece, index) => piece.id === index);
   };
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.timerContainer}>
+        <Text style={styles.timerText}>Time left: {formatTime(timeLeft)}</Text>
+      </View>
       <View style={styles.puzzleContainer}>
         {pieces.map((piece, index) => (
           <TouchableOpacity
@@ -71,6 +94,7 @@ const TabTestPuzzle = () => {
               selectedPiece === index && styles.selectedPiece,
             ]}
             onPress={() => handlePiecePress(index)}
+            disabled={gameOver}
           >
             <Image
               source={puzzleImage}
@@ -89,23 +113,41 @@ const TabTestPuzzle = () => {
           </TouchableOpacity>
         ))}
       </View>
-      {isPuzzleSolved() && <View style={styles.solvedOverlay}><Text style={styles.solvedText}>Puzzle Solved!</Text></View>}
-    </View>
+      {isPuzzleSolved() && (
+        <View style={styles.overlayContainer}>
+          <Text style={styles.overlayText}>Puzzle Solved!</Text>
+        </View>
+      )}
+      {gameOver && !isPuzzleSolved() && (
+        <View style={styles.overlayContainer}>
+          <Text style={styles.overlayText}>
+            Unfortunately, time is over. Try next time!
+          </Text>
+        </View>
+      )}
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  timerContainer: {
+    padding: 10,
+    alignItems: 'center',
+  },
+  timerText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   puzzleContainer: {
     width: PUZZLE_WIDTH,
     height: PUZZLE_HEIGHT,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignSelf: 'center',
   },
   piece: {
     width: PUZZLE_WIDTH / 3,
@@ -119,7 +161,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'yellow',
   },
-  solvedOverlay: {
+  overlayContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -129,10 +171,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  solvedText: {
+  overlayText: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20,
   },
 });
 
