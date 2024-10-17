@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text } from 'react-native';
 
-const puzzleImage = require('../assets/image/puzzle/museum.png');
+const puzzleImage = require('../assets/image/puzzle/culture.png');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const PUZZLE_HEIGHT = SCREEN_HEIGHT * 0.75;
+const PUZZLE_WIDTH = PUZZLE_HEIGHT * (9 / 16);
 
 const TabTestPuzzle = () => {
   const [pieces, setPieces] = useState([]);
@@ -12,8 +16,8 @@ const TabTestPuzzle = () => {
   }, []);
 
   const createPuzzlePieces = () => {
-    const numRows = 3;
-    const numCols = 4;
+    const numRows = 4;
+    const numCols = 3;
     const newPieces = [];
 
     for (let i = 0; i < numRows * numCols; i++) {
@@ -73,11 +77,11 @@ const TabTestPuzzle = () => {
               style={[
                 styles.pieceImage,
                 {
-                  width: Dimensions.get('window').width,
-                  height: Dimensions.get('window').width * 0.75,
+                  width: PUZZLE_WIDTH,
+                  height: PUZZLE_HEIGHT,
                   transform: [
-                    { translateX: -piece.col * (Dimensions.get('window').width / 4) },
-                    { translateY: -piece.row * (Dimensions.get('window').width * 0.75 / 3) },
+                    { translateX: -piece.col * (PUZZLE_WIDTH / 3) },
+                    { translateY: -piece.row * (PUZZLE_HEIGHT / 4) },
                   ],
                 },
               ]}
@@ -90,23 +94,22 @@ const TabTestPuzzle = () => {
   );
 };
 
-export default TabTestPuzzle;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#F5FCFF',
   },
   puzzleContainer: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width * 0.75,
+    width: PUZZLE_WIDTH,
+    height: PUZZLE_HEIGHT,
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   piece: {
-    width: Dimensions.get('window').width / 4,
-    height: (Dimensions.get('window').width * 0.75) / 3,
+    width: PUZZLE_WIDTH / 3,
+    height: PUZZLE_HEIGHT / 4,
     overflow: 'hidden',
   },
   pieceImage: {
@@ -132,3 +135,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default TabTestPuzzle;
