@@ -4,6 +4,7 @@ export const quizData = [
     id: 1,
     name: 'History of Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4168, longitude: -3.7038 }, // General coordinates for Madrid
     questions: [
       {
         question: 'In which year was Madrid declared the capital of Spain?',
@@ -87,6 +88,7 @@ export const quizData = [
     id: 2,
     name: 'Culture of Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4146, longitude: -3.7004 }, // Coordinates for Plaza Mayor, a cultural landmark
     questions: [
       {
         question:
@@ -165,6 +167,7 @@ export const quizData = [
     id: 3,
     name: 'Landmarks of Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4180, longitude: -3.7144 }, // Coordinates for Royal Palace of Madrid
     questions: [
       {
         question: 'What is the most famous royal palace in Madrid?',
@@ -254,6 +257,7 @@ export const quizData = [
     id: 4,
     name: 'Sports in Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4530, longitude: -3.6883 }, // Coordinates for Santiago Bernabéu Stadium
     questions: [
       {
         question: 'Which football club is based in Madrid?',
@@ -319,6 +323,7 @@ export const quizData = [
     id: 5,
     name: 'Gastronomy of Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4154, longitude: -3.7089 }, // Coordinates for Mercado de San Miguel
     questions: [
       {
         question:
@@ -391,6 +396,7 @@ export const quizData = [
     id: 6,
     name: 'Festivals and Events in Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4169, longitude: -3.7033 }, // Coordinates for Puerta del Sol, where many events take place
     questions: [
       {
         question: "What is the name of Madrid's largest music festival?",
@@ -407,24 +413,6 @@ export const quizData = [
           "What is the name of the event that takes place on New Year's Eve in Puerta del Sol?",
         options: ['Midnight Mass', 'Nochevieja', 'Carnaval'],
         answer: 'Nochevieja',
-      },
-      {
-        question: 'Which famous film festival is held annually in Madrid?',
-        options: [
-          'Cannes Film Festival',
-          'San Sebastián Film Festival',
-          'Madrid International Film Festival',
-        ],
-        answer: 'Madrid International Film Festival',
-      },
-      {
-        question: 'What is celebrated during the Madrid Pride Parade?',
-        options: [
-          'LGBTQ+ Rights',
-          'Spanish Independence',
-          'Cultural Diversity',
-        ],
-        answer: 'LGBTQ+ Rights',
       },
       {
         question: 'Which festival features fireworks and parades in Madrid?',
@@ -465,6 +453,7 @@ export const quizData = [
     id: 7,
     name: 'Famous People from Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4141, longitude: -3.6921 }, // Coordinates for Prado Museum, associated with many famous artists
     questions: [
       {
         question: 'Who was a famous Spanish painter born in Madrid?',
@@ -540,6 +529,7 @@ export const quizData = [
     id: 8,
     name: 'Architecture of Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4200, longitude: -3.6883 }, // Coordinates for Gran Via, known for its architecture
     questions: [
       {
         question:
@@ -613,6 +603,7 @@ export const quizData = [
     id: 9,
     name: 'Transportation in Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4065, longitude: -3.6895 }, // Coordinates for Atocha Station
     questions: [
       {
         question: "What is the name of Madrid's metro system?",
@@ -689,6 +680,7 @@ export const quizData = [
     id: 10,
     name: 'Nature and Parks in Madrid',
     isActive: true,
+    coordinates: { latitude: 40.4153, longitude: -3.6845 }, // Coordinates for Retiro Park
     questions: [
       {
         question:
