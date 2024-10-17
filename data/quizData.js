@@ -1,5 +1,6 @@
 export const quizData = [
   {
+    score: 0,
     id: 1,
     name: 'History of Madrid',
     isActive: true,
@@ -82,6 +83,7 @@ export const quizData = [
       'Moorish Roots of Madrid: The Foundation and Early Development\n\nMadrid, today one of the largest cities in Europe, has an unexpected origin—its roots trace back to the Moorish period when much of the Iberian Peninsula was under Muslim rule. The city was founded in the 9th century by Muhammad I, the Caliph of Cordoba, who built a fortress called *Al-Majrit* (from the Arabic "source of water") on the banks of the Manzanares River. This was not just a defensive structure but also a symbol of Moorish influence in the region.\n\nThe Moors developed an advanced irrigation and water supply system—known as *qanats*—that provided water to the fortress and surrounding settlements. This technical achievement allowed the city to thrive even in the hot and arid climate. The architecture of Madrid at that time was typically Islamic: narrow streets, mosques, and inner courtyards.\n\nAlthough Christian kingdoms captured Madrid in 1083, the Moorish legacy continued to influence the city\'s life. Street names, remnants of fortress walls, and hydraulic structures still remind us of the time when the small Al-Majrit was part of the vast Muslim world.',
   },
   {
+    score: 0,
     id: 2,
     name: 'Culture of Madrid',
     isActive: true,
@@ -159,6 +161,7 @@ export const quizData = [
       'The Reconquista and Christianization of Madrid\n\nMadrid, which had been under Muslim rule since the 9th century, became part of the Christian world after its capture by King Alfonso VI of Castile in 1083. This event marked an important stage in the Reconquista, the gradual reclaiming of the Iberian Peninsula by Christian kingdoms.\n\nAfter the city was conquered, Christian forces began the active Christianization of Madrid. Mosques were converted into churches, including the famous Al-Mudena mosque, which was transformed into the first Christian church. Later, the Almudena Cathedral was built here, dedicated to the Virgin Mary of Almudena, who became the patron saint of Madrid.\n\nThe conquest also encouraged the resettlement of Christian populations in the city. New monasteries and defensive fortifications were constructed, symbolizing the power of the Christian kings. Madrid gradually evolved from a Moorish fortress into an important center of Christian influence, laying the foundation for its future role as the capital of Spain.',
   },
   {
+    score: 0,
     id: 3,
     name: 'Landmarks of Madrid',
     isActive: true,
@@ -247,6 +250,7 @@ export const quizData = [
       "Medieval Madrid: Expansion and Fortification\n\nDuring the Middle Ages, Madrid evolved from a small frontier town into a significant stronghold under Christian rule. After its capture by Alfonso VI in the late 11th century, the city's strategic position on the frontier between Christian and Muslim territories spurred its growth and development.\n\nIn the 12th and 13th centuries, Madrid's population began to increase, and the town expanded beyond its original walls. New fortifications were built to protect the growing city, including a larger defensive wall and several watchtowers. These fortifications helped defend Madrid during turbulent periods, particularly from Moorish counterattacks.\n\nThe city's economy also began to develop, driven by agriculture, trade, and its role as a regional administrative center. Several churches and monasteries were established, reinforcing its Christian identity. By the 15th century, Madrid was a well-fortified and prosperous medieval town, setting the stage for its eventual rise to prominence as the capital of Spain.",
   },
   {
+    score: 0,
     id: 4,
     name: 'Sports in Madrid',
     isActive: true,
@@ -311,6 +315,7 @@ export const quizData = [
       "The Spanish Golden Age and Madrid's Rise as the Capital\n\nThe 16th and 17th centuries, known as the Spanish Golden Age, marked a period of immense cultural, political, and economic growth for Spain, and it was during this time that Madrid transformed into the capital of the Spanish Empire. In 1561, King Philip II moved the royal court from Toledo to Madrid, solidifying the city's status as the political and administrative heart of Spain.\n\nThis decision to make Madrid the capital was largely influenced by its central location, which allowed for better control of the vast Spanish territories. The city quickly grew, as noble families, merchants, and artisans flocked to be near the royal court. Madrid became a hub of artistic and intellectual activity, attracting writers, painters, and scholars. Iconic figures like Miguel de Cervantes and Diego Velázquez flourished during this era, leaving a lasting legacy on Spanish culture.\n\nThe city underwent significant urban development, with the construction of royal palaces, grand squares like Plaza Mayor, and important religious buildings. Madrid's new role as the capital not only elevated its political importance but also made it a cultural center, where the wealth and power of the Spanish Empire were on full display. By the end of the Golden Age, Madrid had firmly established itself as the beating heart of Spain.",
   },
   {
+    score: 0,
     id: 5,
     name: 'Gastronomy of Madrid',
     isActive: true,
@@ -382,6 +387,7 @@ export const quizData = [
       "Madrid in the Habsburg Era\n\nThe Habsburg dynasty, which ruled Spain from the early 16th to the late 17th century, left a profound mark on Madrid's history. When King Charles I, the first Habsburg monarch of Spain, inherited the Spanish crown in 1516, the foundations were laid for Madrid's future prominence. However, it was under Philip II, his son, that Madrid was officially declared the capital of the Spanish Empire in 1561.\n\nDuring the Habsburg era, Madrid evolved from a modest town into a bustling metropolis. The city's landscape transformed significantly as the monarchy invested in grand architectural projects to reflect the empire's power. Notable constructions included the Royal Alcázar of Madrid and the Plaza Mayor, which became central to Madrid's social and political life. The Habsburg rulers, particularly Philip III and Philip IV, continued to embellish the city, commissioning palaces, churches, and monasteries.\n\nCulturally, this period saw the flourishing of Spain's Golden Age, with Madrid becoming a center for art, literature, and theater. Iconic figures like playwright Lope de Vega and painter Diego Velázquez were closely associated with the court. The Baroque style dominated architecture and art, and Madrid's role as the heart of the empire allowed it to attract talents from across Spain and beyond.\n\nHowever, by the late 17th century, the decline of the Spanish Habsburgs, marked by weak leadership and economic difficulties, left the city struggling. Despite this, the legacy of the Habsburg era in Madrid is visible to this day, with its historic buildings and rich cultural heritage defining much of the city's identity.",
   },
   {
+    score: 0,
     id: 6,
     name: 'Festivals and Events in Madrid',
     isActive: true,
@@ -455,6 +461,7 @@ export const quizData = [
       "Madrid in the 18th Century: The Bourbon Rule\n\nThe 18th century marked an era of significant changes and modernization for Madrid under the Bourbon dynasty, which came to power after the War of the Spanish Succession. The first monarch of this new dynasty was Philip V, whose arrival heralded a new chapter in the city's history.\n\nThe Bourbons brought with them the ideas of the Enlightenment, which were reflected in large-scale projects aimed at transforming the capital. The reign of Charles III, one of the most notable kings of the dynasty, was particularly important for the development of Madrid. He is often referred to as \"the best mayor of Madrid\" due to his active involvement in the city's improvement. Under his leadership, iconic structures such as the Puerta de Alcalá, the Royal Botanical Garden, the Prado Museum, and the aqueduct were built, enhancing the quality of life for the city's inhabitants.\n\nThe Bourbons aimed to turn Madrid into a modern European city. Roads were improved, street lighting was introduced, and new parks and squares were created. Special attention was paid to the city's aesthetics: architecture became more symmetrical and grand, inspired by French and Italian styles.\n\nThe economy and culture also flourished during the Bourbon era. Court life in Madrid thrived, and Spain began to integrate into the broader European political and cultural landscape. The reforms of Charles III helped strengthen Madrid's position as the capital and transformed it into one of the cultural and political centers of Europe.\n\nThus, the 18th century and the Bourbon rule represented a time of prosperity, modernization, and cultural uplift for Madrid, solidifying the city's status as the capital of the Spanish Empire.",
   },
   {
+    score: 0,
     id: 7,
     name: 'Famous People from Madrid',
     isActive: true,
@@ -529,6 +536,7 @@ export const quizData = [
       "Madrid During the Napoleonic Wars\n\nThe Napoleonic Wars (1803-1815) had a significant impact on Spain and, in particular, on Madrid, which became the center of the struggle for independence. The conflict began when Napoleon Bonaparte intervened in Spanish affairs, taking advantage of internal contradictions and instability in the country.\n\nIn 1808, Napoleon invaded Spain and forced King Charles IV to abdicate. The Spanish, unhappy with French influence and the loss of their monarch, began organizing resistance. As a result, on May 2, 1808, an uprising against French troops took place in Madrid, known as the May 2 Uprising. This event became a symbol of the Spanish people's struggle for their independence.\n\nFrench troops brutally suppressed the uprising, leading to bloodshed and suffering among the local population. However, the uprising catalyzed the formation of guerrilla groups and a movement for independence that spread throughout the country. The May 2 Uprising inspired other regions of Spain to fight against the French.\n\nFor the next few years, Madrid remained under the control of French troops, but the Spanish continued to resist. The city became a battleground, and life for its residents changed dramatically: many inhabitants became refugees, and the economy suffered severely.\n\nIn 1814, after several years of brutal fighting and international pressure, Napoleon was forced to retreat, and Spanish forces regained control of Madrid. Restoring control over the city marked an important stage in the country's recovery process after the war.",
   },
   {
+    score: 0,
     id: 8,
     name: 'Architecture of Madrid',
     isActive: true,
@@ -601,6 +609,7 @@ export const quizData = [
       "Industrialization and Growth of Madrid in the 19th Century\n\nIn the 19th century, Madrid underwent significant changes, becoming a center of industrialization and growth. Following the Napoleonic Wars, the city began to actively rebuild, with authorities investing in infrastructure development: roads, bridges, and railways were constructed. In 1851, the first railway line connecting Madrid to other regions was opened.\n\nThe growth of industry led to the establishment of factories, attracting workers from rural areas. Madrid saw the development of the textile, metallurgy, and food industries, contributing to economic growth. The city's population increased significantly, and by the end of the century, Madrid had become one of the largest cities in Europe.\n\nHowever, rapid growth also brought social issues, such as housing shortages and declining living conditions. Workers began to organize into unions, demanding better working conditions. Thus, the 19th century was a time of profound changes that shaped the future of Madrid.",
   },
   {
+    score: 0,
     id: 9,
     name: 'Transportation in Madrid',
     isActive: true,
@@ -676,6 +685,7 @@ export const quizData = [
       "Madrid During the Spanish Civil War (1936-1939)\n\nThe Spanish Civil War (1936-1939) left a deep mark on Madrid's history, turning it into one of the main fronts of the conflict. From the very beginning of the war, the capital became a symbol of resistance against fascism and right-wing dictatorship. In July 1936, following the uprising led by General Francisco Franco, mass protests erupted in Madrid, and the local population took up arms to defend the Republic.\n\nBy 1937, Madrid was subjected to intense bombing by Franco's forces and their allies, including Nazi Germany and fascist Italy. Civilian targets and residential areas were attacked, resulting in a high number of casualties among the civilian population. During this time, the city became an important cultural and political center for Republicans, hosting various organizations, groups, and artists, including notable figures like Ernesto \"Che\" Guevara and the painter Pablo Picasso.\n\nDespite the difficult conditions, Madrid continued to resist until 1939. However, in March 1939, the city fell under the onslaught of Franco's forces, marking the end of the Civil War and the beginning of a long period of dictatorship. The Civil War left deep wounds in Madrid, but it also became a source of inspiration for future generations fighting for freedom and democracy.",
   },
   {
+    score: 0,
     id: 10,
     name: 'Nature and Parks in Madrid',
     isActive: true,
