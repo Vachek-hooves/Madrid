@@ -5,8 +5,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { AppContextProvider } from './store/context';
-import WelcomeScreen from './screen/WelcomeScreen';
-import TabTestPuzzle from './screen/TabTestPuzzle';
+import WelcomeScreen from './screen/STACK/WelcomeScreen';
+import TabTestPuzzle from './screen/TAB/TabTestPuzzle';
+import {
+  TabMapGuide,
+  TabMapQuiz,
+  TabPuzzleIntroScreen,
+  TabUserScreen,
+} from './screen/TAB';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,7 +76,6 @@ const TabNavigator = () => {
             <Image
               source={iconName}
               style={{
-
                 width: 40,
                 height: 40,
                 tintColor: color,
@@ -82,10 +87,10 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="User" component={WelcomeScreen} />
-      <Tab.Screen name="Map" component={WelcomeScreen} />
-      <Tab.Screen name="Puzzle" component={TabTestPuzzle} />
-      <Tab.Screen name="Quiz" component={WelcomeScreen} />
+      <Tab.Screen name="User" component={TabUserScreen} />
+      <Tab.Screen name="Map" component={TabMapGuide} />
+      <Tab.Screen name="Puzzle" component={TabPuzzleIntroScreen} />
+      <Tab.Screen name="Quiz" component={TabMapQuiz} />
     </Tab.Navigator>
   );
 };
@@ -94,9 +99,15 @@ function App() {
   return (
     <AppContextProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            animation: 'fade',
+            animationDuration: 1000,
+          }}
+        >
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContextProvider>

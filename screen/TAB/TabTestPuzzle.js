@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Dimensions, Text, SafeAreaView } from 'react-native';
-
-const puzzleImage = require('../assets/image/puzzle/culture.png');
+import AppLayout from '../../components/layout/AppLayout';
+const puzzleImage = require('../../assets/image/puzzle/culture.png');
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const PUZZLE_HEIGHT = SCREEN_HEIGHT * 0.75;
@@ -81,6 +81,8 @@ const TabTestPuzzle = () => {
   };
 
   return (
+    <AppLayout blur={10}>
+
     <SafeAreaView style={styles.container}>
       <View style={styles.timerContainer}>
         <Text style={styles.timerText}>Time left: {formatTime(timeLeft)}</Text>
@@ -88,13 +90,13 @@ const TabTestPuzzle = () => {
       <View style={styles.puzzleContainer}>
         {pieces.map((piece, index) => (
           <TouchableOpacity
-            key={piece.id}
-            style={[
-              styles.piece,
-              selectedPiece === index && styles.selectedPiece,
-            ]}
-            onPress={() => handlePiecePress(index)}
-            disabled={gameOver}
+          key={piece.id}
+          style={[
+            styles.piece,
+            selectedPiece === index && styles.selectedPiece,
+          ]}
+          onPress={() => handlePiecePress(index)}
+          disabled={gameOver}
           >
             <Image
               source={puzzleImage}
@@ -109,7 +111,7 @@ const TabTestPuzzle = () => {
                   ],
                 },
               ]}
-            />
+              />
           </TouchableOpacity>
         ))}
       </View>
@@ -126,13 +128,14 @@ const TabTestPuzzle = () => {
         </View>
       )}
     </SafeAreaView>
+      </AppLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
+    // flex: 1,
+    // backgroundColor: '#F5FCFF',
   },
   timerContainer: {
     padding: 10,

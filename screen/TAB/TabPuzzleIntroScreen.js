@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import AppLayout from '../../components/layout/AppLayout'
 
 const TabPuzzleIntroScreen = () => {
   return (
-    <View>
-      <Text>TabPuzzleIntroScreen</Text>
-    </View>
+    <AppLayout>
+      
+    </AppLayout>
   )
 }
 

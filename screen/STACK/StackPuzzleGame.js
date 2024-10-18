@@ -1,14 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 
-const WelcomeScreen = () => {
+const StackPuzzleGame = () => {
   return (
     <View>
-      <Text>WelcomeScreen</Text>
+      <Text>StackPuzzleGame</Text>
     </View>
   )
 }
 
-export default WelcomeScreen
+export default StackPuzzleGame
 
 const styles = StyleSheet.create({})
