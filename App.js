@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image } from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer} from '@react-navigation/native';
-import {AppContextProvider} from './store/context';
+import { Image, View, Platform } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import { AppContextProvider } from './store/context';
 import WelcomeScreen from './screen/WelcomeScreen';
 import TabTestPuzzle from './screen/TabTestPuzzle';
 
@@ -16,18 +17,41 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          position: 'absolute',
           borderTopWidth: 0,
-          elevation: 10,
-          shadowOpacity: 0.1,
-          shadowRadius: 20,
+          elevation: 0,
+          height: 100,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          overflow: 'hidden',
+
+          ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: -3 },
+              shadowOpacity: 0.1,
+              shadowRadius: 3,
+            },
+          }),
         },
-        tabBarActiveTintColor: '#4a4a4a',
-        tabBarInactiveTintColor: '#9b9b9b',
+        tabBarBackground: () => (
+          <LinearGradient
+            colors={['#F1BF00', '#F1BF00', '#AA151B']}
+            style={{ height: '100%' }}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          />
+        ),
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: '#FFFFFF' + 90,
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
           marginBottom: 5,
+        },
+        tabBarIconStyle: {
+          // marginBottom: 5,
+          marginTop: 5,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -46,9 +70,10 @@ const TabNavigator = () => {
             <Image
               source={iconName}
               style={{
-                width: size,
-                height: size,
-                tintColor: focused ? '#4a4a4a' : '#9b9b9b',
+                width: 40,
+                height: 40,
+                tintColor: color,
+                opacity: focused ? 1 : 0.7,
               }}
             />
           );
@@ -67,7 +92,7 @@ function App() {
   return (
     <AppContextProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         </Stack.Navigator>
