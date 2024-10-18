@@ -47,11 +47,11 @@ const TabNavigator = () => {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
-          marginBottom: 5,
+          // marginBottom: 5,
         },
         tabBarIconStyle: {
           // marginBottom: 5,
-          marginTop: 5,
+          // marginTop: 5,
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -70,10 +70,12 @@ const TabNavigator = () => {
             <Image
               source={iconName}
               style={{
+
                 width: 40,
                 height: 40,
                 tintColor: color,
                 opacity: focused ? 1 : 0.7,
+                marginTop: 10,
               }}
             />
           );
