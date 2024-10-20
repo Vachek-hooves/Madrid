@@ -78,8 +78,8 @@ const TabNavigator = () => {
             <Image
               source={iconName}
               style={{
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
                 tintColor: color,
                 opacity: focused ? 1 : 0.7,
                 marginTop: 10,
