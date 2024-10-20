@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, ScrollView, TextInput, Image, Alert } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-// import * as ImagePicker from 'expo-image-picker';
 import * as ImagePicker from 'react-native-image-picker';
+import LinearGradient from 'react-native-linear-gradient';
 import AppLayout from '../../components/layout/AppLayout';
 import { useAppContext } from '../../store/context';
-import LinearGradient from 'react-native-linear-gradient';
 
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = 0.0421;
@@ -13,9 +12,7 @@ const LONGITUDE_DELTA = 0.0421;
 const TabMapGuide = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [createMarkerMode, setCreateMarkerMode] = useState(false);
   const [newMarker, setNewMarker] = useState(null);
-  const [createModalVisible, setCreateModalVisible] = useState(false);
   const { quizzes, updateQuizData } = useAppContext();
 
   const initialRegion = {
@@ -30,17 +27,15 @@ const TabMapGuide = () => {
     setModalVisible(true);
   };
 
-  const handleMapLongPress = (event) => {
-    if (createMarkerMode) {
-      const { coordinate } = event.nativeEvent;
-      setNewMarker({
-        coordinate,
-        title: '',
-        description: '',
-        images: [],
-      });
-      setCreateModalVisible(true);
-    }
+  const handleMapPress = (event) => {
+    const { coordinate } = event.nativeEvent;
+    setNewMarker({
+      coordinate,
+      title: '',
+      description: '',
+      images: [],
+    });
+    setModalVisible(true);
   };
 
   const pickImage = async () => {
@@ -61,13 +56,15 @@ const TabMapGuide = () => {
     }
   };
 
-  const handleCreateMarker = () => {
-    if (newMarker) {
+  const handleSaveMarker = () => {
+    if (newMarker && newMarker.title && newMarker.description) {
       const updatedQuizzes = [...quizzes, { ...newMarker, id: Date.now().toString() }];
       updateQuizData(updatedQuizzes);
       setNewMarker(null);
-      setCreateModalVisible(false);
-      setCreateMarkerMode(false);
+      setModalVisible(false);
+      Alert.alert('Success', 'New marker has been created!');
+    } else {
+      Alert.alert('Error', 'Please fill in all fields before saving.');
     }
   };
 
@@ -110,22 +107,6 @@ const TabMapGuide = () => {
         >
           <Text style={styles.markerText}>{quiz.id}</Text>
         </LinearGradient>
-        <Callout>
-          <LinearGradient
-            colors={['#F1BF00', '#AA151B']}
-            style={styles.calloutContainer}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <Text style={styles.calloutTitle}>{quiz.title}</Text>
-            <TouchableOpacity
-              style={styles.calloutButton}
-              onPress={() => setModalVisible(true)}
-            >
-              <Text style={styles.calloutButtonText}>Show Details</Text>
-            </TouchableOpacity>
-          </LinearGradient>
-        </Callout>
       </Marker>
     ));
 
@@ -139,15 +120,38 @@ const TabMapGuide = () => {
     }
   };
 
-  const renderMarkerDetails = () => {
-    if (!selectedPlace) return null;
+  const renderModalContent = () => {
+    const isNewMarker = !selectedPlace;
+    const markerData = isNewMarker ? newMarker : selectedPlace;
+
+    if (!markerData) return null;
 
     return (
       <>
-        <Text style={styles.modalTitle}>{selectedPlace.title}</Text>
-        <Text style={styles.modalDescription}>{selectedPlace.description}</Text>
-        {selectedPlace.images &&
-          selectedPlace.images.map((image, index) => (
+        <TextInput
+          style={styles.input}
+          placeholder="Place Name"
+          placeholderTextColor="#fff"
+          value={markerData.title}
+          onChangeText={text => isNewMarker ? setNewMarker(prev => ({...prev, title: text})) : null}
+          editable={isNewMarker}
+        />
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Description"
+          placeholderTextColor="#fff"
+          multiline
+          value={markerData.description}
+          onChangeText={text => isNewMarker ? setNewMarker(prev => ({...prev, description: text})) : null}
+          editable={isNewMarker}
+        />
+        {isNewMarker && (
+          <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
+            <Text style={styles.imageButtonText}>Add Image</Text>
+          </TouchableOpacity>
+        )}
+        {markerData.images &&
+          markerData.images.map((image, index) => (
             <Image
               key={index}
               source={renderMarkerImage(image)}
@@ -155,11 +159,19 @@ const TabMapGuide = () => {
               resizeMode="cover"
             />
           ))}
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={handleDeleteMarker}>
-          <Text style={styles.deleteButtonText}>Delete Marker</Text>
-        </TouchableOpacity>
+        {isNewMarker ? (
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={handleSaveMarker}>
+            <Text style={styles.saveButtonText}>Save Marker</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={handleDeleteMarker}>
+            <Text style={styles.deleteButtonText}>Delete Marker</Text>
+          </TouchableOpacity>
+        )}
       </>
     );
   };
@@ -170,38 +182,32 @@ const TabMapGuide = () => {
         <MapView
           style={styles.map}
           initialRegion={initialRegion}
-          onLongPress={handleMapLongPress}
+          onPress={handleMapPress}
         >
           {renderQuizMarkers()}
+          {newMarker && (
+            <Marker coordinate={newMarker.coordinate}>
+              <LinearGradient
+                colors={['#F1BF00', '#AA151B']}
+                style={styles.markerContainer}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.markerText}>New</Text>
+              </LinearGradient>
+            </Marker>
+          )}
         </MapView>
-
-        <LinearGradient
-          colors={['#F1BF00', '#AA151B']}
-          style={styles.createMarkerButton}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <TouchableOpacity
-            onPress={() => setCreateMarkerMode(!createMarkerMode)}>
-            <Text style={styles.createMarkerButtonText}>
-              {createMarkerMode ? 'Cancel' : 'Create Marker'}
-            </Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        {createMarkerMode && (
-          <View style={styles.instructionContainer}>
-            <Text style={styles.instructionText}>
-              Long press on the map to add a new marker
-            </Text>
-          </View>
-        )}
 
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}>
+          onRequestClose={() => {
+            setModalVisible(false);
+            setNewMarker(null);
+            setSelectedPlace(null);
+          }}>
           <View style={styles.modalOverlay}>
             <LinearGradient
               colors={['#F1BF00', '#AA151B']}
@@ -210,71 +216,16 @@ const TabMapGuide = () => {
               end={{ x: 1, y: 1 }}
             >
               <ScrollView contentContainerStyle={styles.modalContent}>
-                {renderMarkerDetails()}
+                {renderModalContent()}
               </ScrollView>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => setModalVisible(false)}>
+                onPress={() => {
+                  setModalVisible(false);
+                  setNewMarker(null);
+                  setSelectedPlace(null);
+                }}>
                 <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
-        </Modal>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={createModalVisible}
-          onRequestClose={() => setCreateModalVisible(false)}>
-          <View style={styles.modalOverlay}>
-            <LinearGradient
-              colors={['#F1BF00', '#AA151B']}
-              style={styles.modalView}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
-              <ScrollView contentContainerStyle={styles.modalContent}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Place Name"
-                  placeholderTextColor="#fff"
-                  value={newMarker?.title || ''}
-                  onChangeText={text =>
-                    setNewMarker(prev => ({...prev, title: text}))
-                  }
-                />
-                <TextInput
-                  style={[styles.input, styles.textArea]}
-                  placeholder="Description"
-                  placeholderTextColor="#fff"
-                  multiline
-                  value={newMarker?.description || ''}
-                  onChangeText={text =>
-                    setNewMarker(prev => ({...prev, description: text}))
-                  }
-                />
-                <TouchableOpacity style={styles.imageButton} onPress={pickImage}>
-                  <Text style={styles.imageButtonText}>Add Image</Text>
-                </TouchableOpacity>
-                {newMarker?.images &&
-                  newMarker.images.map((image, index) => (
-                    <Image
-                      key={index}
-                      source={renderMarkerImage(image)}
-                      style={styles.modalImage}
-                      resizeMode="cover"
-                    />
-                  ))}
-              </ScrollView>
-              <TouchableOpacity
-                style={styles.createButton}
-                onPress={handleCreateMarker}>
-                <Text style={styles.createButtonText}>Create Marker</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setCreateModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Cancel</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
@@ -450,6 +401,18 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   deleteButtonText: {
+    color: '#AA151B',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  saveButton: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginTop: 15,
+  },
+  saveButtonText: {
     color: '#AA151B',
     fontWeight: 'bold',
     textAlign: 'center',
