@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, ScrollView, TextInput, Image, Alert } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
-import * as ImagePicker from 'react-native-image-picker';
+import MapView, { Marker } from 'react-native-maps';
 import LinearGradient from 'react-native-linear-gradient';
+import { launchImageLibrary } from 'react-native-image-picker';
 import AppLayout from '../../components/layout/AppLayout';
 import { useAppContext } from '../../store/context';
 
@@ -38,22 +38,27 @@ const TabMapGuide = () => {
     setModalVisible(true);
   };
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-      base64: true,
-    });
+  const pickImage = () => {
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 200,
+      maxWidth: 200,
+    };
 
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const newImage = `data:image/jpeg;base64,${result.assets[0].base64}`;
-      setNewMarker(prev => ({
-        ...prev,
-        images: [...(prev.images || []), newImage],
-      }));
-    }
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.assets[0].uri };
+        setNewMarker(prev => ({
+          ...prev,
+          images: [...(prev.images || []), source],
+        }));
+      }
+    });
   };
 
   const handleSaveMarker = () => {
@@ -110,16 +115,6 @@ const TabMapGuide = () => {
       </Marker>
     ));
 
-  const renderMarkerImage = (image) => {
-    if (typeof image === 'string' && image.startsWith('data:image')) {
-      return { uri: image };
-    } else if (typeof image === 'number') {
-      return image;
-    } else {
-      return { uri: image };
-    }
-  };
-
   const renderModalContent = () => {
     const isNewMarker = !selectedPlace;
     const markerData = isNewMarker ? newMarker : selectedPlace;
@@ -154,7 +149,7 @@ const TabMapGuide = () => {
           markerData.images.map((image, index) => (
             <Image
               key={index}
-              source={renderMarkerImage(image)}
+              source={image}
               style={styles.modalImage}
               resizeMode="cover"
             />
