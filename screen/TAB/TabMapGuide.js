@@ -110,7 +110,7 @@ const TabMapGuide = () => {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <Text style={styles.markerText}>{quiz.id}</Text>
+          <Text style={styles.markerText}>{quiz.title}</Text>
         </LinearGradient>
       </Marker>
     ));
@@ -182,7 +182,7 @@ const TabMapGuide = () => {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.markerText}>New</Text>
+                <Text style={styles.markerText}>N</Text>
               </LinearGradient>
             </Marker>
           )}
@@ -233,9 +233,9 @@ const styles = StyleSheet.create({
     height: '90%',
   },
   markerContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   markerText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 20,
   },
   calloutContainer: {
     width: 200,
