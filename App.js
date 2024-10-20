@@ -91,7 +91,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="User" component={TabUserScreen} />
       <Tab.Screen name="Map" component={TabMapGuide} />
-      <Tab.Screen name="Puzzle" component={TabPuzzleIntroScreen} />
+      {/* <Tab.Screen name="Puzzle" component={TabPuzzleIntroScreen} /> */}
       <Tab.Screen name="Quiz" component={TabMapQuiz} />
     </Tab.Navigator>
   );
