@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import LinearGradient from 'react-native-linear-gradient';
 import { useAppContext } from '../../store/context';
 import AppLayout from '../../components/layout/AppLayout';
 
@@ -30,13 +31,33 @@ const TabMapQuiz = () => {
             <Marker
               key={quiz.id}
               coordinate={quiz.coordinates}
-              title={quiz.name}
-              description={`Score: ${quiz.score}`}
               onPress={() => handleMarkerPress(quiz)}
             >
-              <View style={styles.markerContainer}>
+              <LinearGradient
+                colors={['#F1BF00', '#AA151B']}
+                style={styles.markerContainer}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
                 <Text style={styles.markerText}>{quiz.id}</Text>
-              </View>
+              </LinearGradient>
+              <Callout>
+                <LinearGradient
+                  colors={['#F1BF00', '#AA151B']}
+                  style={styles.calloutContainer}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.calloutTitle}>{quiz.name}</Text>
+                  <Text style={styles.calloutScore}>Score: {quiz.score}</Text>
+                  <TouchableOpacity
+                    style={styles.calloutButton}
+                    onPress={() => handleMarkerPress(quiz)}
+                  >
+                    <Text style={styles.calloutButtonText}>Start Quiz</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </Callout>
             </Marker>
           ))}
         </MapView>
@@ -51,16 +72,46 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: '90%',
+    height: '100%',
   },
   markerContainer: {
-    backgroundColor: 'white',
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    padding: 5,
-    borderWidth: 1,
-    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'white',
   },
   markerText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  calloutContainer: {
+    width: 200,
+    padding: 15,
+    borderRadius: 10,
+  },
+  calloutTitle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  calloutScore: {
+    color: 'white',
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  calloutButton: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  calloutButtonText: {
+    color: '#AA151B',
     fontWeight: 'bold',
   },
 });
