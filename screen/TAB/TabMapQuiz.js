@@ -7,7 +7,7 @@ import AppLayout from '../../components/layout/AppLayout';
 import { useNavigation } from '@react-navigation/native';
 
 const TabMapQuiz = () => {
-  const { quizzes, totalScore, unlockQuiz } = useAppContext();
+  const { quizzes, totalScore, unlockQuiz, resetAllQuizzes } = useAppContext();
   const navigation = useNavigation();
 
   const initialRegion = {
@@ -40,6 +40,23 @@ const TabMapQuiz = () => {
         ]
       );
     }
+  };
+
+  const handleResetQuizzes = () => {
+    Alert.alert(
+      'Reset All Quizzes',
+      'Are you sure you want to reset all quizzes? This will clear all scores and lock all quizzes except the first one.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Reset', 
+          onPress: () => {
+            resetAllQuizzes();
+            Alert.alert('Success', 'All quizzes have been reset.');
+          }
+        }
+      ]
+    );
   };
 
   return (
@@ -90,9 +107,11 @@ const TabMapQuiz = () => {
           style={styles.scoreContainer}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          >
-         
+        >
           <Text style={styles.scoreText}>Total Score: {totalScore}</Text>
+          <TouchableOpacity style={styles.resetButton} onPress={handleResetQuizzes}>
+            <Text style={styles.resetButtonText}>Reset</Text>
+          </TouchableOpacity>
         </LinearGradient>
       </View>
     </AppLayout>
@@ -158,13 +177,23 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   scoreText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  resetButton: {
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 5,
+  },
+  resetButtonText: {
+    color: '#AA151B',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
 

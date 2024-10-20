@@ -81,6 +81,19 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
+  const resetAllQuizzes = async () => {
+    try {
+      const resetQuizzes = quizzes.map((quiz, index) => ({
+        ...quiz,
+        score: 0,
+        isActive: index === 0 // Only the first quiz remains active
+      }));
+      await updateQuizData(resetQuizzes);
+    } catch (error) {
+      console.error('Error resetting quizzes:', error);
+    }
+  };
+
   const value = {
     quizzes,
     updateQuizData,
@@ -88,6 +101,7 @@ export const AppContextProvider = ({ children }) => {
     updateQuizScore,
     unlockQuiz,
     addPuzzleScore,
+    resetAllQuizzes,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
