@@ -65,6 +65,10 @@ const StackQuizGamePlay = ({ route }) => {
     navigation.navigate('TabNavigator', { screen: 'Quiz' });
   };
 
+  const handlePlayPuzzle = () => {
+    navigation.navigate('StackPuzzleGame', { quizId: currentQuiz.id, quizName: currentQuiz.name });
+  };
+
   if (quizCompleted) {
     return (
       <AppLayout>
@@ -88,6 +92,16 @@ const StackQuizGamePlay = ({ route }) => {
                   end={{ x: 1, y: 1 }}
                 >
                   <Text style={styles.returnButtonText}>Return to Map</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handlePlayPuzzle}>
+                <LinearGradient
+                  colors={['#F1BF00', '#D68A00']}
+                  style={styles.puzzleButton}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.puzzleButtonText}>Play Puzzle for More Score</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </ScrollView>
@@ -232,6 +246,20 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   returnButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  puzzleButton: {
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  puzzleButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',

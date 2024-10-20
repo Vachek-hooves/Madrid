@@ -9,19 +9,28 @@ import {
   SafeAreaView,
 } from 'react-native';
 import AppLayout from '../../components/layout/AppLayout';
+import { puzzleData } from '../../data/puzzleData';
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const PUZZLE_HEIGHT = SCREEN_HEIGHT * 0.75;
-const PUZZLE_WIDTH = PUZZLE_WIDTH * (9 / 16);
+const PUZZLE_WIDTH = PUZZLE_HEIGHT * (9 / 16);
 
-const StackPuzzleGame = () => {
+const StackPuzzleGame = ({ route }) => {
+  const { quizId, quizName } = route.params;
   const [pieces, setPieces] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
   const [gameOver, setGameOver] = useState(false);
+  const [puzzleImage, setPuzzleImage] = useState(null);
 
   useEffect(() => {
-    createPuzzlePieces();
+    const puzzle = puzzleData.find(p => p.id === quizId);
+    if (puzzle) {
+      setPuzzleImage(puzzle.image);
+      createPuzzlePieces();
+    }
+
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
@@ -34,7 +43,7 @@ const StackPuzzleGame = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [quizId]);
 
   const createPuzzlePieces = () => {
     const numRows = 4;
@@ -92,57 +101,57 @@ const StackPuzzleGame = () => {
 
   return (
     <AppLayout blur={10}>
-
-    <SafeAreaView style={styles.container}>
-      <View style={styles.timerContainer}>
-        <Text style={styles.timerText}>Time left: {formatTime(timeLeft)}</Text>
-      </View>
-      <View style={styles.puzzleContainer}>
-        {pieces.map((piece, index) => (
-          <TouchableOpacity
-          key={piece.id}
-          style={[
-            styles.piece,
-            selectedPiece === index && styles.selectedPiece,
-          ]}
-          onPress={() => handlePiecePress(index)}
-          disabled={gameOver}
-          >
-            <Image
-              source={puzzleImage}
-              style={[
-                styles.pieceImage,
-                {
-                  width: PUZZLE_WIDTH,
-                  height: PUZZLE_HEIGHT,
-                  transform: [
-                    { translateX: -piece.col * (PUZZLE_WIDTH / 3) },
-                    { translateY: -piece.row * (PUZZLE_HEIGHT / 4) },
-                  ],
-                },
-              ]}
-              />
-          </TouchableOpacity>
-        ))}
-      </View>
-      {isPuzzleSolved() && (
-        <View style={styles.overlayContainer}>
-          <Text style={styles.overlayText}>Puzzle Solved!</Text>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.quizName}>{quizName} Puzzle</Text>
+        <View style={styles.timerContainer}>
+          <Text style={styles.timerText}>Time left: {formatTime(timeLeft)}</Text>
         </View>
-      )}
-      {gameOver && !isPuzzleSolved() && (
-        <View style={styles.overlayContainer}>
-          <Text style={styles.overlayText}>
-            Unfortunately, time is over. Try next time!
-          </Text>
-        </View>
-      )}
-    </SafeAreaView>
-      </AppLayout>
+        {puzzleImage && (
+          <View style={styles.puzzleContainer}>
+            {pieces.map((piece, index) => (
+              <TouchableOpacity
+                key={piece.id}
+                style={[
+                  styles.piece,
+                  selectedPiece === index && styles.selectedPiece,
+                ]}
+                onPress={() => handlePiecePress(index)}
+                disabled={gameOver}
+              >
+                <Image
+                  source={puzzleImage}
+                  style={[
+                    styles.pieceImage,
+                    {
+                      width: PUZZLE_WIDTH,
+                      height: PUZZLE_HEIGHT,
+                      transform: [
+                        { translateX: -piece.col * (PUZZLE_WIDTH / 3) },
+                        { translateY: -piece.row * (PUZZLE_HEIGHT / 4) },
+                      ],
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+        {isPuzzleSolved() && (
+          <View style={styles.overlayContainer}>
+            <Text style={styles.overlayText}>Puzzle Solved!</Text>
+          </View>
+        )}
+        {gameOver && !isPuzzleSolved() && (
+          <View style={styles.overlayContainer}>
+            <Text style={styles.overlayText}>
+              Unfortunately, time is over. Try next time!
+            </Text>
+          </View>
+        )}
+      </SafeAreaView>
+    </AppLayout>
   );
 };
-
-export default StackPuzzleGame;
 
 const styles = StyleSheet.create({
   container: {
@@ -193,4 +202,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
   },
+  quizName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
 });
+
+export default StackPuzzleGame;

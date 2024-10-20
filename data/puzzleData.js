@@ -1,43 +1,43 @@
 export const puzzleData = [
     {
         id: 1,
-        image: require('../assets/image/history.png'),
+        image: require('../assets/image/puzzle/history.png'),
     },
     {
         id: 2,
-        image: require('../assets/image/culture.png'),
+        image: require('../assets/image/puzzle/culture.png'),
     },
     {
         id: 3,
-        image: require('../assets/image/landmark.png'),
+        image: require('../assets/image/puzzle/landmark.png'),
     },
     {
         id: 4,
-        image: require('../assets/image/sport.png'),
+        image: require('../assets/image/puzzle/sport.png'),
     },
     {
         id: 5,
-        image: require('../assets/image/gastronomy.png'),
+        image: require('../assets/image/puzzle/gastronomy.png'),
     },
     {
         id: 6,
-        image: require('../assets/image/festival.png'),
+        image: require('../assets/image/puzzle/festival.png'),
     },      
     {
         id: 7,
-        image: require('../assets/image/famousPeople.png'),
+        image: require('../assets/image/puzzle/famousPeople.png'),
     },
     {
         id: 8,
-        image: require('../assets/image/architecture.png'),
+        image: require('../assets/image/puzzle/architecture.png'),
     },
     {
         id: 9,
-        image: require('../assets/image/transportation.png'),
+        image: require('../assets/image/puzzle/transportation.png'),
     },
     {
         id: 10,
-        image: require('../assets/image/parks.png'),
+        image: require('../assets/image/puzzle/parks.png'),
     },
     
 ]
