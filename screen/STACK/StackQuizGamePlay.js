@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { useAppContext } from '../../store/context';
 import AppLayout from '../../components/layout/AppLayout';
 import LinearGradient from 'react-native-linear-gradient';
@@ -46,6 +46,13 @@ const StackQuizGamePlay = ({ route }) => {
     }
   };
 
+  const getOptionStyle = (option) => {
+    if (selectedAnswer === null) return ['#F1BF00', '#D68A00'];
+    if (option === currentQuestion.answer) return ['#4CAF50', '#45a049'];
+    if (option === selectedAnswer) return ['#f44336', '#d32f2f'];
+    return ['#F1BF00', '#D68A00'];
+  };
+
   return (
     <AppLayout>
       <LinearGradient
@@ -54,43 +61,44 @@ const StackQuizGamePlay = ({ route }) => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <Text style={styles.quizName}>{currentQuiz.name}</Text>
-          <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}</Text>
-          <Text style={styles.question}>{currentQuestion.question}</Text>
-          {currentQuestion.options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleAnswer(option)}
-              disabled={selectedAnswer !== null}
-            >
-              <LinearGradient
-                colors={['#F1BF00', '#D68A00']}
-                style={[
-                  styles.optionButton,
-                  selectedAnswer === option && styles.selectedOption
-                ]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+        <SafeAreaView style={styles.safeArea}>
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <Text style={styles.quizName}>{currentQuiz.name}</Text>
+            <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}</Text>
+            <View style={styles.questionContainer}>
+              <Text style={styles.question}>{currentQuestion.question}</Text>
+            </View>
+            {currentQuestion.options.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleAnswer(option)}
+                disabled={selectedAnswer !== null}
               >
-                <Text style={styles.optionText}>{option}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          ))}
-          {selectedAnswer && (
-            <TouchableOpacity onPress={handleNextQuestion}>
-              <LinearGradient
-                colors={['#F1BF00', '#D68A00']}
-                style={styles.nextButton}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.nextButtonText}>Next Question</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
-          <Text style={styles.score}>Current Score: {score}</Text>
-        </ScrollView>
+                <LinearGradient
+                  colors={getOptionStyle(option)}
+                  style={styles.optionButton}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            ))}
+            {selectedAnswer && (
+              <TouchableOpacity onPress={handleNextQuestion}>
+                <LinearGradient
+                  colors={['#F1BF00', '#D68A00']}
+                  style={styles.nextButton}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.nextButtonText}>Next Question</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+            <Text style={styles.score}>Current Score: {score}</Text>
+          </ScrollView>
+        </SafeAreaView>
       </LinearGradient>
     </AppLayout>
   );
@@ -100,11 +108,15 @@ const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
   },
+  safeArea: {
+    flex: 1,
+  },
   scrollViewContent: {
     flexGrow: 1,
     padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 40,
   },
   quizName: {
     fontSize: 24,
@@ -117,10 +129,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'white',
   },
+  questionContainer: {
+    height: 100,
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
   question: {
     fontSize: 20,
     textAlign: 'center',
-    marginBottom: 20,
     color: 'white',
   },
   optionButton: {
@@ -130,9 +146,6 @@ const styles = StyleSheet.create({
     width: 300,
     borderWidth: 2,
     borderColor: 'white',
-  },
-  selectedOption: {
-    opacity: 0.8,
   },
   optionText: {
     fontSize: 16,
