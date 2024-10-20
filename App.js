@@ -13,6 +13,7 @@ import {
   TabPuzzleIntroScreen,
   TabUserScreen,
 } from './screen/TAB';
+import { StackQuizGamePlay } from './screen/STACK';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -109,6 +110,10 @@ function App() {
         >
           <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen
+            name="StackQuizGamePlay"
+            component={StackQuizGamePlay}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </AppContextProvider>

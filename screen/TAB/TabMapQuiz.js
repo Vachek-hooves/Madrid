@@ -4,9 +4,11 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppContext } from '../../store/context';
 import AppLayout from '../../components/layout/AppLayout';
+import { useNavigation } from '@react-navigation/native';
 
 const TabMapQuiz = () => {
   const { quizzes } = useAppContext();
+  const navigation = useNavigation();
 
   const initialRegion = {
     latitude: 40.4168,
@@ -15,9 +17,8 @@ const TabMapQuiz = () => {
     longitudeDelta: 0.0421,
   };
 
-  const handleMarkerPress = (quiz) => {
-    // TODO: Implement navigation to quiz details or start quiz
-    console.log('Quiz selected:', quiz.name);
+  const handleStartQuiz = (quiz) => {
+    navigation.navigate('StackQuizGamePlay', { quizId: quiz.id });
   };
 
   return (
@@ -31,7 +32,6 @@ const TabMapQuiz = () => {
             <Marker
               key={quiz.id}
               coordinate={quiz.coordinates}
-              onPress={() => handleMarkerPress(quiz)}
             >
               <LinearGradient
                 colors={['#F1BF00', '#AA151B']}
@@ -52,7 +52,7 @@ const TabMapQuiz = () => {
                   <Text style={styles.calloutScore}>Score: {quiz.score}</Text>
                   <TouchableOpacity
                     style={styles.calloutButton}
-                    onPress={() => handleMarkerPress(quiz)}
+                    onPress={() => handleStartQuiz(quiz)}
                   >
                     <Text style={styles.calloutButtonText}>Start Quiz</Text>
                   </TouchableOpacity>
