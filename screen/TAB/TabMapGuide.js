@@ -9,10 +9,12 @@ const TabMapGuide = () => {
   const [markers, setMarkers] = useState([]);
   const [showCreateMarkerModal, setShowCreateMarkerModal] = useState(false);
   const [showMarkerFormModal, setShowMarkerFormModal] = useState(false);
+  const [showMarkerDetailsModal, setShowMarkerDetailsModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [markerName, setMarkerName] = useState('');
   const [markerDescription, setMarkerDescription] = useState('');
   const [markerImages, setMarkerImages] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   const initialRegion = {
     latitude: 40.4168,
@@ -66,6 +68,23 @@ const TabMapGuide = () => {
     setMarkerImages(markerImages.filter((_, i) => i !== index));
   };
 
+  const handleMarkerPress = (marker) => {
+    setSelectedMarker(marker);
+    setShowMarkerDetailsModal(true);
+  };
+
+  const CustomMarker = ({ marker }) => (
+    <View style={styles.customMarkerContainer}>
+      {marker.images && marker.images.length > 0 ? (
+        <Image source={{ uri: marker.images[0] }} style={styles.markerImage} />
+      ) : (
+        <View style={styles.markerNameContainer}>
+          <Text style={styles.markerNameText}>{marker.name}</Text>
+        </View>
+      )}
+    </View>
+  );
+
   return (
     <AppLayout>
       <View style={styles.container}>
@@ -80,7 +99,9 @@ const TabMapGuide = () => {
               coordinate={marker.coordinate}
               title={marker.name}
               description={marker.description}
-            />
+            >
+              <CustomMarker marker={marker} />
+            </Marker>
           ))}
         </MapView>
         <LinearGradient
@@ -150,6 +171,31 @@ const TabMapGuide = () => {
               <TouchableOpacity style={styles.button} onPress={() => setShowMarkerFormModal(false)}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </Modal>
+
+        <Modal
+          visible={showMarkerDetailsModal}
+          transparent={true}
+          animationType="slide"
+        >
+          <View style={styles.modalContainer}>
+            <ScrollView contentContainerStyle={styles.modalContent}>
+              {selectedMarker && (
+                <>
+                  <Text style={styles.modalTitle}>{selectedMarker.name}</Text>
+                  <Text style={styles.markerDescription}>{selectedMarker.description}</Text>
+                  <View style={styles.imageContainer}>
+                    {selectedMarker.images.map((image, index) => (
+                      <Image key={index} source={{ uri: image }} style={styles.previewImage} />
+                    ))}
+                  </View>
+                  <TouchableOpacity style={styles.button} onPress={() => setShowMarkerDetailsModal(false)}>
+                    <Text style={styles.buttonText}>Close</Text>
+                  </TouchableOpacity>
+                </>
+              )}
             </ScrollView>
           </View>
         </Modal>
@@ -231,6 +277,7 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: 'cover',
     borderRadius: 5,
+    margin: 5,
   },
   removeImageButton: {
     position: 'absolute',
@@ -244,6 +291,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   removeImageText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  markerDescription: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  customMarkerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  markerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  markerNameContainer: {
+    backgroundColor: '#AA151B',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  markerNameText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 12,
