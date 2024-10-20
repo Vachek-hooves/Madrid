@@ -396,7 +396,7 @@ export const quizData = [
     id: 6,
     name: 'Festivals and Events in Madrid',
     isActive: false,
-    coordinates: { latitude: 40.4169, longitude: -3.7033 }, // Coordinates for Puerta del Sol, where many events take place
+    coordinates: { latitude: 40.4169, longitude: -3.5063 }, // Coordinates for Puerta del Sol, where many events take place
     questions: [
       {
         question: "What is the name of Madrid's largest music festival?",
