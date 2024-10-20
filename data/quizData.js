@@ -87,7 +87,7 @@ export const quizData = [
     score: 0,
     id: 2,
     name: 'Culture of Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4146, longitude: -3.7004 }, // Coordinates for Plaza Mayor, a cultural landmark
     questions: [
       {
@@ -166,7 +166,7 @@ export const quizData = [
     score: 0,
     id: 3,
     name: 'Landmarks of Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4180, longitude: -3.7144 }, // Coordinates for Royal Palace of Madrid
     questions: [
       {
@@ -256,7 +256,7 @@ export const quizData = [
     score: 0,
     id: 4,
     name: 'Sports in Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4110, longitude: -3.6883 }, // Coordinates for Santiago Bernabéu Stadium
     questions: [
       {
@@ -322,7 +322,7 @@ export const quizData = [
     score: 0,
     id: 5,
     name: 'Gastronomy of Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4154, longitude: -3.7089 }, // Coordinates for Mercado de San Miguel
     questions: [
       {
@@ -395,7 +395,7 @@ export const quizData = [
     score: 0,
     id: 6,
     name: 'Festivals and Events in Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4169, longitude: -3.7033 }, // Coordinates for Puerta del Sol, where many events take place
     questions: [
       {
@@ -452,7 +452,7 @@ export const quizData = [
     score: 0,
     id: 7,
     name: 'Famous People from Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4141, longitude: -3.6921 }, // Coordinates for Prado Museum, associated with many famous artists
     questions: [
       {
@@ -528,7 +528,7 @@ export const quizData = [
     score: 0,
     id: 8,
     name: 'Architecture of Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4200, longitude: -3.6883 }, // Coordinates for Gran Via, known for its architecture
     questions: [
       {
@@ -602,7 +602,7 @@ export const quizData = [
     score: 0,
     id: 9,
     name: 'Transportation in Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4065, longitude: -3.6895 }, // Coordinates for Atocha Station
     questions: [
       {
@@ -679,7 +679,7 @@ export const quizData = [
     score: 0,
     id: 10,
     name: 'Nature and Parks in Madrid',
-    isActive: true,
+    isActive: false,
     coordinates: { latitude: 40.4153, longitude: -3.6845 }, // Coordinates for Retiro Park
     questions: [
       {
