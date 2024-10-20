@@ -27,7 +27,7 @@ const StackPuzzleGame = ({ route }) => {
   const [puzzleImage, setPuzzleImage] = useState(null);
   const [puzzleScore, setPuzzleScore] = useState(10);
   const [gameStarted, setGameStarted] = useState(false);
-  const { updateTotalScore } = useAppContext();
+  const { updateTotalScore, addPuzzleScore } = useAppContext();
   const navigation = useNavigation();
 
   const createPuzzlePieces = useCallback(() => {
@@ -112,7 +112,7 @@ const StackPuzzleGame = ({ route }) => {
     const solved = pieces.every((piece, index) => piece.id === index);
     if (solved && !gameOver) {
       setGameOver(true);
-      updateTotalScore(puzzleScore);
+      addPuzzleScore(quizId, puzzleScore);
     }
     return solved;
   };

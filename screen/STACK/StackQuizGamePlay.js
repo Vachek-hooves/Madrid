@@ -35,7 +35,8 @@ const StackQuizGamePlay = ({ route }) => {
       setSelectedAnswer(null);
     } else {
       setQuizCompleted(true);
-      updateQuizScore(quizId, score + 1);
+      const finalScore = score + (selectedAnswer === currentQuestion.answer ? 1 : 0);
+      updateQuizScore(quizId, finalScore);
     }
   };
 

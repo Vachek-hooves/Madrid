@@ -12,7 +12,6 @@ export const AppContextProvider = ({ children }) => {
     const initQuizData = async () => {
       try {
         const storedQuizData = await AsyncStorage.getItem('quizData');
-        const storedTotalScore = await AsyncStorage.getItem('totalScore');
         
         if (storedQuizData === null) {
           await AsyncStorage.setItem('quizData', JSON.stringify(quizData));
@@ -21,9 +20,7 @@ export const AppContextProvider = ({ children }) => {
           setQuizzes(JSON.parse(storedQuizData));
         }
 
-        if (storedTotalScore !== null) {
-          setTotalScore(parseInt(storedTotalScore, 10) || 0);
-        }
+        calculateTotalScore(JSON.parse(storedQuizData) || quizData);
       } catch (error) {
         console.error('Error initializing quiz data:', error);
       }
@@ -32,22 +29,19 @@ export const AppContextProvider = ({ children }) => {
     initQuizData();
   }, []);
 
+  const calculateTotalScore = (quizzes) => {
+    const newTotalScore = quizzes.reduce((total, quiz) => total + (quiz.score || 0), 0);
+    setTotalScore(newTotalScore);
+    AsyncStorage.setItem('totalScore', newTotalScore.toString());
+  };
+
   const updateQuizData = async (newQuizData) => {
     try {
       await AsyncStorage.setItem('quizData', JSON.stringify(newQuizData));
       setQuizzes(newQuizData);
+      calculateTotalScore(newQuizData);
     } catch (error) {
       console.error('Error updating quiz data:', error);
-    }
-  };
-
-  const updateTotalScore = async (scoreToAdd) => {
-    try {
-      const newTotalScore = totalScore + scoreToAdd;
-      await AsyncStorage.setItem('totalScore', newTotalScore.toString());
-      setTotalScore(newTotalScore);
-    } catch (error) {
-      console.error('Error updating total score:', error);
     }
   };
 
@@ -57,7 +51,6 @@ export const AppContextProvider = ({ children }) => {
         quiz.id === quizId ? { ...quiz, score: newScore } : quiz
       );
       await updateQuizData(updatedQuizzes);
-      await updateTotalScore(newScore);
     } catch (error) {
       console.error('Error updating quiz score:', error);
     }
@@ -69,19 +62,32 @@ export const AppContextProvider = ({ children }) => {
         q.id === quizId ? { ...q, isActive: true } : q
       );
       await updateQuizData(updatedQuizzes);
-      await updateTotalScore(-10);
+      const newTotalScore = totalScore - 10;
+      setTotalScore(newTotalScore);
+      await AsyncStorage.setItem('totalScore', newTotalScore.toString());
       return true;
     }
     return false;
+  };
+
+  const addPuzzleScore = async (quizId, puzzleScore) => {
+    try {
+      const updatedQuizzes = quizzes.map(quiz => 
+        quiz.id === quizId ? { ...quiz, score: (quiz.score || 0) + puzzleScore } : quiz
+      );
+      await updateQuizData(updatedQuizzes);
+    } catch (error) {
+      console.error('Error adding puzzle score:', error);
+    }
   };
 
   const value = {
     quizzes,
     updateQuizData,
     totalScore,
-    updateTotalScore,
     updateQuizScore,
     unlockQuiz,
+    addPuzzleScore,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
