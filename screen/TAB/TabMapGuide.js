@@ -174,7 +174,7 @@ const TabMapGuide = () => {
           animationType="slide"
         >
           <View style={styles.modalContainer}>
-            <ScrollView contentContainerStyle={styles.modalContent}>
+            <View contentContainerStyle={styles.modalContent} style={styles.modalContent}>
               <Text style={styles.modalTitle}>New Marker Details</Text>
               <TextInput
                 style={styles.input}
@@ -192,7 +192,7 @@ const TabMapGuide = () => {
               <TouchableOpacity style={styles.button} onPress={handleImagePick}>
                 <Text style={styles.buttonText}>Choose Images</Text>
               </TouchableOpacity>
-              <View style={styles.imageContainer}>
+              <ScrollView contentContainerStyle={styles.imageContainer}>
                 {markerImages.map((image, index) => (
                   <View key={index} style={styles.imageWrapper}>
                     <Image source={{ uri: image }} style={styles.previewImage} />
@@ -201,14 +201,14 @@ const TabMapGuide = () => {
                     </TouchableOpacity>
                   </View>
                 ))}
-              </View>
+              </ScrollView>
               <TouchableOpacity style={styles.button} onPress={handleSaveMarker}>
                 <Text style={styles.buttonText}>Save Marker</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => setShowMarkerFormModal(false)}>
                 <Text style={styles.buttonText}>Cancel</Text>
               </TouchableOpacity>
-            </ScrollView>
+            </View>
           </View>
         </Modal>
 
@@ -218,18 +218,18 @@ const TabMapGuide = () => {
           animationType="slide"
         >
           <View style={styles.modalContainer}>
-            <ScrollView contentContainerStyle={styles.modalContent}>
+            <View contentContainerStyle={styles.modalContent} style={styles.modalContent}>
               {selectedMarker && (
                 <>
                   <Text style={styles.modalTitle}>{selectedMarker.name}</Text>
                   <Text style={styles.markerDescription}>{selectedMarker.description}</Text>
-                  <View style={styles.imageContainer}>
+                  <ScrollView contentContainerStyle={styles.imageContainer}>
                     {selectedMarker.images.map((image, index) => (
                       <View key={index} style={styles.imageWrapper}>
                         <Image source={{ uri: image }} style={styles.previewImage} />
                       </View>
                     ))}
-                  </View>
+                  </ScrollView>
                   <TouchableOpacity style={styles.button} onPress={() => setShowMarkerDetailsModal(false)}>
                     <Text style={styles.buttonText}>Close</Text>
                   </TouchableOpacity>
@@ -238,7 +238,7 @@ const TabMapGuide = () => {
                   </TouchableOpacity>
                 </>
               )}
-            </ScrollView>
+            </View>
           </View>
         </Modal>
       </View>
@@ -347,8 +347,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   markerImage: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     borderRadius: 20,
     borderWidth: 2,
     borderColor: 'white',
