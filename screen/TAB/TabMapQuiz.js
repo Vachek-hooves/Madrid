@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppContext } from '../../store/context';
@@ -7,7 +7,7 @@ import AppLayout from '../../components/layout/AppLayout';
 import { useNavigation } from '@react-navigation/native';
 
 const TabMapQuiz = () => {
-  const { quizzes } = useAppContext();
+  const { quizzes, totalScore, unlockQuiz } = useAppContext();
   const navigation = useNavigation();
 
   const initialRegion = {
@@ -18,7 +18,28 @@ const TabMapQuiz = () => {
   };
 
   const handleStartQuiz = (quiz) => {
-    navigation.navigate('StackQuizGamePlay', { quizId: quiz.id });
+    if (quiz.isActive) {
+      navigation.navigate('StackQuizGamePlay', { quizId: quiz.id });
+    } else {
+      Alert.alert(
+        'Locked Quiz',
+        'This quiz is locked. Would you like to unlock it for 10 scores?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Unlock', 
+            onPress: async () => {
+              const unlocked = await unlockQuiz(quiz.id);
+              if (unlocked) {
+                Alert.alert('Success', 'Quiz unlocked! You can now start the quiz.');
+              } else {
+                Alert.alert('Error', 'Not enough scores to unlock this quiz.');
+              }
+            }
+          }
+        ]
+      );
+    }
   };
 
   return (
@@ -32,6 +53,7 @@ const TabMapQuiz = () => {
             <Marker
               key={quiz.id}
               coordinate={quiz.coordinates}
+              opacity={quiz.isActive ? 1 : 0.5}
             >
               <LinearGradient
                 colors={['#F1BF00', '#AA151B']}
@@ -44,7 +66,7 @@ const TabMapQuiz = () => {
               <Callout>
                 <LinearGradient
                   colors={['#F1BF00', '#AA151B']}
-                  style={styles.calloutContainer}
+                  style={[styles.calloutContainer, !quiz.isActive && styles.lockedCallout]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
@@ -54,13 +76,24 @@ const TabMapQuiz = () => {
                     style={styles.calloutButton}
                     onPress={() => handleStartQuiz(quiz)}
                   >
-                    <Text style={styles.calloutButtonText}>Start Quiz</Text>
+                    <Text style={styles.calloutButtonText}>
+                      {quiz.isActive ? 'Start Quiz' : 'Unlock Quiz'}
+                    </Text>
                   </TouchableOpacity>
                 </LinearGradient>
               </Callout>
             </Marker>
           ))}
         </MapView>
+        <LinearGradient
+          colors={['#F1BF00', '#AA151B']}
+          style={styles.scoreContainer}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          >
+         
+          <Text style={styles.scoreText}>Total Score: {totalScore}</Text>
+        </LinearGradient>
       </View>
     </AppLayout>
   );
@@ -72,7 +105,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: '90%',
+    height: '100%',
   },
   markerContainer: {
     width: 40,
@@ -113,6 +146,25 @@ const styles = StyleSheet.create({
   calloutButtonText: {
     color: '#AA151B',
     fontWeight: 'bold',
+  },
+  lockedCallout: {
+    opacity: 0.7,
+  },
+  scoreContainer: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    right: 20,
+    padding: 10,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scoreText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 

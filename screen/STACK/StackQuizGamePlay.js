@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const StackQuizGamePlay = ({ route }) => {
   const { quizId } = route.params;
-  const { quizzes, updateQuizData } = useAppContext();
+  const { quizzes, updateQuizData, totalScore, updateTotalScore } = useAppContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -45,11 +45,12 @@ const StackQuizGamePlay = ({ route }) => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       setQuizCompleted(true);
-      // Update the quiz score in the context
+      const newScore = score + 1;
       const updatedQuizzes = quizzes.map(q => 
-        q.id === quizId ? { ...q, score: score + 1 } : q
+        q.id === quizId ? { ...q, score: newScore } : q
       );
       updateQuizData(updatedQuizzes);
+      updateTotalScore(totalScore + newScore);
     }
   };
 
