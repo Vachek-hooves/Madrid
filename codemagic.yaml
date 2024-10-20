@@ -1,4 +1,4 @@
-workflow:
+workflows:
   madrid-workflow:
     name: Travel Guide Grand Madrid
     max_build_duration: 120
