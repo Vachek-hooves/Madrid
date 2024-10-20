@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal, TextInput, Image, ScrollView } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import LinearGradient from 'react-native-linear-gradient';
 import AppLayout from '../../components/layout/AppLayout';
 import { launchImageLibrary } from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const MARKERS_STORAGE_KEY = '@guide_map_markers';
 
 const TabMapGuide = () => {
   const [markers, setMarkers] = useState([]);
@@ -47,6 +50,29 @@ const TabMapGuide = () => {
     });
   };
 
+  useEffect(() => {
+    loadMarkers();
+  }, []);
+
+  const loadMarkers = async () => {
+    try {
+      const storedMarkers = await AsyncStorage.getItem(MARKERS_STORAGE_KEY);
+      if (storedMarkers !== null) {
+        setMarkers(JSON.parse(storedMarkers));
+      }
+    } catch (error) {
+      console.error('Error loading markers:', error);
+    }
+  };
+
+  const saveMarkers = async (newMarkers) => {
+    try {
+      await AsyncStorage.setItem(MARKERS_STORAGE_KEY, JSON.stringify(newMarkers));
+    } catch (error) {
+      console.error('Error saving markers:', error);
+    }
+  };
+
   const handleSaveMarker = () => {
     if (markerName && selectedLocation) {
       const newMarker = {
@@ -56,10 +82,19 @@ const TabMapGuide = () => {
         description: markerDescription,
         images: markerImages,
       };
-      setMarkers([...markers, newMarker]);
+      const updatedMarkers = [...markers, newMarker];
+      setMarkers(updatedMarkers);
+      saveMarkers(updatedMarkers);
       setShowMarkerFormModal(false);
       resetForm();
     }
+  };
+
+  const handleDeleteMarker = (markerId) => {
+    const updatedMarkers = markers.filter(marker => marker.id !== markerId);
+    setMarkers(updatedMarkers);
+    saveMarkers(updatedMarkers);
+    setShowMarkerDetailsModal(false);
   };
 
   const resetForm = () => {
@@ -196,6 +231,9 @@ const TabMapGuide = () => {
                   <TouchableOpacity style={styles.button} onPress={() => setShowMarkerDetailsModal(false)}>
                     <Text style={styles.buttonText}>Close</Text>
                   </TouchableOpacity>
+                  <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={() => handleDeleteMarker(selectedMarker.id)}>
+                    <Text style={styles.buttonText}>Delete Marker</Text>
+                  </TouchableOpacity>
                 </>
               )}
             </ScrollView>
@@ -324,6 +362,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 12,
+  },
+  deleteButton: {
+    backgroundColor: 'red',
   },
 });
 
