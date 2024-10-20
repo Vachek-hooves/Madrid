@@ -28,6 +28,11 @@ const TabMapGuide = () => {
     setShowCreateMarkerModal(true);
   };
 
+  const handleMarkerPress = (marker) => {
+    setSelectedMarker(marker);
+    setShowMarkerDetailsModal(true);
+  };
+
   const handleCreateMarker = () => {
     setShowCreateMarkerModal(false);
     setShowMarkerFormModal(true);
@@ -68,11 +73,6 @@ const TabMapGuide = () => {
     setMarkerImages(markerImages.filter((_, i) => i !== index));
   };
 
-  const handleMarkerPress = (marker) => {
-    setSelectedMarker(marker);
-    setShowMarkerDetailsModal(true);
-  };
-
   const CustomMarker = ({ marker }) => (
     <View style={styles.customMarkerContainer}>
       {marker.images && marker.images.length > 0 ? (
@@ -97,8 +97,10 @@ const TabMapGuide = () => {
             <Marker
               key={marker.id}
               coordinate={marker.coordinate}
-              title={marker.name}
-              description={marker.description}
+              onPress={(e) => {
+                e.stopPropagation();
+                handleMarkerPress(marker);
+              }}
             >
               <CustomMarker marker={marker} />
             </Marker>
