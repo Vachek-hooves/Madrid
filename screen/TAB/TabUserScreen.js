@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Image,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLayout from '../../components/layout/AppLayout';
 import * as ImagePicker from 'react-native-image-picker';
+import SoundSystemIcon from '../../components/ui/SoundSystemIcon';
+import ControlSystem from '../../components/bgSound/ControlSystem';
 
 const TabUserScreen = () => {
   const [user, setUser] = useState({ name: '', image: null });
@@ -41,7 +51,7 @@ const TabUserScreen = () => {
     try {
       await AsyncStorage.removeItem('userData');
       setUser({ name: '', image: null });
-      setIsEditing(true);  // Allow editing after deletion
+      setIsEditing(true); // Allow editing after deletion
       Alert.alert('Success', 'User data deleted successfully');
     } catch (error) {
       console.error('Error deleting user data:', error);
@@ -69,13 +79,15 @@ const TabUserScreen = () => {
         } else if (response.assets && response.assets.length > 0) {
           setUser({ ...user, image: response.assets[0].uri });
         }
-      },
+      }
     );
   };
 
   const renderUserDetails = () => (
     <View style={styles.userDetails}>
-      {user.image && <Image source={{ uri: user.image }} style={styles.userImage} />}
+      {user.image && (
+        <Image source={{ uri: user.image }} style={styles.userImage} />
+      )}
       <Text style={styles.userName}>{user.name}</Text>
     </View>
   );
@@ -109,7 +121,10 @@ const TabUserScreen = () => {
               <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setIsEditing(true)}
+            >
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
           )}
@@ -118,6 +133,7 @@ const TabUserScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <ControlSystem />
     </AppLayout>
   );
 };
@@ -131,7 +147,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     marginTop: 40,
-    
   },
   title: {
     fontSize: 24,

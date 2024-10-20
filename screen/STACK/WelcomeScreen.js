@@ -24,7 +24,7 @@ const WelcomeScreen = () => {
         />
         <Text style={styles.title}>Welcome to Our App</Text>
         <Text style={styles.subtitle}>Get ready for an adventure!</Text>
-        <Text style={styles.subtitle}>Great Journey Madrid</Text>
+        <Text style={styles.subtitle}>Travel Guide Grand Madrid</Text>
       </View>
     </AppLayout>
   )
