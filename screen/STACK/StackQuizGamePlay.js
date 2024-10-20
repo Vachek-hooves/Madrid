@@ -48,44 +48,60 @@ const StackQuizGamePlay = ({ route }) => {
 
   return (
     <AppLayout>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.quizName}>{currentQuiz.name}</Text>
-        <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}</Text>
-        <Text style={styles.question}>{currentQuestion.question}</Text>
-        {currentQuestion.options.map((option, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.optionButton,
-              selectedAnswer === option && styles.selectedOption
-            ]}
-            onPress={() => handleAnswer(option)}
-            disabled={selectedAnswer !== null}
-          >
-            <Text style={styles.optionText}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-        {selectedAnswer && (
-          <LinearGradient
-            colors={['#F1BF00', '#AA151B']}
-            style={styles.nextButton}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <TouchableOpacity onPress={handleNextQuestion}>
-              <Text style={styles.nextButtonText}>Next Question</Text>
+      <LinearGradient
+        colors={['#F1BF00', '#AA151B']}
+        style={styles.gradientContainer}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <Text style={styles.quizName}>{currentQuiz.name}</Text>
+          <Text style={styles.questionNumber}>Question {currentQuestionIndex + 1} of {currentQuiz.questions.length}</Text>
+          <Text style={styles.question}>{currentQuestion.question}</Text>
+          {currentQuestion.options.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleAnswer(option)}
+              disabled={selectedAnswer !== null}
+            >
+              <LinearGradient
+                colors={['#F1BF00', '#D68A00']}
+                style={[
+                  styles.optionButton,
+                  selectedAnswer === option && styles.selectedOption
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </LinearGradient>
             </TouchableOpacity>
-          </LinearGradient>
-        )}
-        <Text style={styles.score}>Current Score: {score}</Text>
-      </ScrollView>
+          ))}
+          {selectedAnswer && (
+            <TouchableOpacity onPress={handleNextQuestion}>
+              <LinearGradient
+                colors={['#F1BF00', '#D68A00']}
+                style={styles.nextButton}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.nextButtonText}>Next Question</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+          <Text style={styles.score}>Current Score: {score}</Text>
+        </ScrollView>
+      </LinearGradient>
     </AppLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  gradientContainer: {
     flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -94,34 +110,43 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'white',
   },
   questionNumber: {
     fontSize: 18,
     marginBottom: 10,
+    color: 'white',
   },
   question: {
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 20,
+    color: 'white',
   },
   optionButton: {
-    backgroundColor: '#f0f0f0',
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    width: '100%',
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   selectedOption: {
-    backgroundColor: '#F1BF00',
+    opacity: 0.8,
   },
   optionText: {
     fontSize: 16,
     textAlign: 'center',
+    color: 'white',
+    fontWeight: 'bold',
   },
   nextButton: {
     padding: 15,
     borderRadius: 10,
     marginTop: 20,
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   nextButtonText: {
     color: 'white',
@@ -132,6 +157,7 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 18,
     marginTop: 20,
+    color: 'white',
   },
 });
 
