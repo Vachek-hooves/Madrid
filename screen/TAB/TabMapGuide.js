@@ -126,7 +126,7 @@ const TabMapGuide = () => {
         <TextInput
           style={styles.input}
           placeholder="Place Name"
-          placeholderTextColor="#fff"
+          placeholderTextColor="#999"
           value={markerData.title}
           onChangeText={text => isNewMarker ? setNewMarker(prev => ({...prev, title: text})) : null}
           editable={isNewMarker}
@@ -134,7 +134,7 @@ const TabMapGuide = () => {
         <TextInput
           style={[styles.input, styles.textArea]}
           placeholder="Description"
-          placeholderTextColor="#fff"
+          placeholderTextColor="#999"
           multiline
           value={markerData.description}
           onChangeText={text => isNewMarker ? setNewMarker(prev => ({...prev, description: text})) : null}
@@ -154,17 +154,11 @@ const TabMapGuide = () => {
               resizeMode="cover"
             />
           ))}
-        {isNewMarker ? (
+        {isNewMarker && (
           <TouchableOpacity
             style={styles.saveButton}
             onPress={handleSaveMarker}>
             <Text style={styles.saveButtonText}>Save Marker</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={handleDeleteMarker}>
-            <Text style={styles.deleteButtonText}>Delete Marker</Text>
           </TouchableOpacity>
         )}
       </>
@@ -306,8 +300,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 20,
+    alignItems: 'stretch',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -320,7 +314,7 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
   },
   modalContent: {
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
   modalTitle: {
     fontSize: 20,
@@ -357,7 +351,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     width: '100%',
-    color: 'white',
+    color: '#333',
+    backgroundColor: 'white',
+    borderRadius: 5,
   },
   textArea: {
     height: 100,
@@ -368,7 +364,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginBottom: 10,
+    marginVertical: 10,
   },
   imageButtonText: {
     color: '#AA151B',
