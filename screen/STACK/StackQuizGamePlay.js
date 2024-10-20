@@ -3,14 +3,17 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView } fr
 import { useAppContext } from '../../store/context';
 import AppLayout from '../../components/layout/AppLayout';
 import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 const StackQuizGamePlay = ({ route }) => {
   const { quizId } = route.params;
-  const { quizzes } = useAppContext();
+  const { quizzes, updateQuizData } = useAppContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const quiz = quizzes.find(q => q.id === quizId);
@@ -41,8 +44,12 @@ const StackQuizGamePlay = ({ route }) => {
     if (currentQuestionIndex < currentQuiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Quiz finished, handle completion (e.g., show results, update score)
-      console.log('Quiz completed! Final score:', score);
+      setQuizCompleted(true);
+      // Update the quiz score in the context
+      const updatedQuizzes = quizzes.map(q => 
+        q.id === quizId ? { ...q, score: score + 1 } : q
+      );
+      updateQuizData(updatedQuizzes);
     }
   };
 
@@ -52,6 +59,42 @@ const StackQuizGamePlay = ({ route }) => {
     if (option === selectedAnswer) return ['#f44336', '#d32f2f'];
     return ['#F1BF00', '#D68A00'];
   };
+
+  const handleReturnToMap = () => {
+    navigation.navigate('TabNavigator', { screen: 'Quiz' });
+  };
+
+  if (quizCompleted) {
+    return (
+      <AppLayout>
+        <LinearGradient
+          colors={['#F1BF00', '#AA151B']}
+          style={styles.gradientContainer}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <SafeAreaView style={styles.safeArea}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              <Text style={styles.quizName}>{currentQuiz.name} Completed!</Text>
+              <Text style={styles.score}>Final Score: {score} / {currentQuiz.questions.length}</Text>
+              <Text style={styles.resultText}>Correct Answers: {score}</Text>
+              <Text style={styles.resultText}>Incorrect Answers: {currentQuiz.questions.length - score}</Text>
+              <TouchableOpacity onPress={handleReturnToMap}>
+                <LinearGradient
+                  colors={['#F1BF00', '#D68A00']}
+                  style={styles.returnButton}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.returnButtonText}>Return to Map</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </ScrollView>
+          </SafeAreaView>
+        </LinearGradient>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>
@@ -92,7 +135,9 @@ const StackQuizGamePlay = ({ route }) => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Text style={styles.nextButtonText}>Next Question</Text>
+                  <Text style={styles.nextButtonText}>
+                    {currentQuestionIndex < currentQuiz.questions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+                  </Text>
                 </LinearGradient>
               </TouchableOpacity>
             )}
@@ -171,6 +216,25 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 20,
     color: 'white',
+  },
+  resultText: {
+    fontSize: 18,
+    color: 'white',
+    marginBottom: 10,
+  },
+  returnButton: {
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  returnButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
