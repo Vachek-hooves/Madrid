@@ -257,7 +257,7 @@ export const quizData = [
     id: 4,
     name: 'Sports in Madrid',
     isActive: true,
-    coordinates: { latitude: 40.4530, longitude: -3.6883 }, // Coordinates for Santiago Bernabéu Stadium
+    coordinates: { latitude: 40.4110, longitude: -3.6883 }, // Coordinates for Santiago Bernabéu Stadium
     questions: [
       {
         question: 'Which football club is based in Madrid?',

@@ -49,7 +49,8 @@ const TabNavigator = () => {
           />
         ),
         tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#FFFFFF' + 90,
+        // tabBarInactiveTintColor: '#FFFFFF' + 90,
+        tabBarInactiveTintColor: 'black',
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
