@@ -178,7 +178,7 @@ const TabMapGuide = () => {
               <Text style={styles.modalTitle}>New Marker Details</Text>
               <TextInput
                 style={styles.input}
-                placeholder="Marker Name"
+                placeholder="New marker"
                 value={markerName}
                 onChangeText={setMarkerName}
               />
@@ -225,7 +225,9 @@ const TabMapGuide = () => {
                   <Text style={styles.markerDescription}>{selectedMarker.description}</Text>
                   <View style={styles.imageContainer}>
                     {selectedMarker.images.map((image, index) => (
-                      <Image key={index} source={{ uri: image }} style={styles.previewImage} />
+                      <View key={index} style={styles.imageWrapper}>
+                        <Image source={{ uri: image }} style={styles.previewImage} />
+                      </View>
                     ))}
                   </View>
                   <TouchableOpacity style={styles.button} onPress={() => setShowMarkerDetailsModal(false)}>
@@ -276,8 +278,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    width: '80%',
-    maxHeight: '80%',
+    width: '90%',
+    maxHeight: '90%',
   },
   modalTitle: {
     fontSize: 18,
@@ -306,24 +308,24 @@ const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    marginVertical: 10,
   },
   imageWrapper: {
-    position: 'relative',
-    margin: 5,
+    width: '30%',
+    aspectRatio: 1,
+    marginBottom: 10,
   },
   previewImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'cover',
+    width: '100%',
+    height: '100%',
     borderRadius: 5,
-    margin: 5,
   },
   removeImageButton: {
     position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: 'red',
+    top: 2,
+    right: 2,
+    backgroundColor: 'rgba(255, 0, 0, 0.7)',
     borderRadius: 10,
     width: 20,
     height: 20,
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
   removeImageText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 10,
   },
   markerDescription: {
     fontSize: 14,
