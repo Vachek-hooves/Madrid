@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   scoreContainer: {
     position: 'absolute',
-    top: 40,
+    top: '6%',
     left: 20,
     right: 20,
     padding: 10,
