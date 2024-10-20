@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import AppLayout from '../../components/layout/AppLayout';
 import { puzzleData } from '../../data/puzzleData';
+import { useAppContext } from '../../store/context';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -20,32 +22,15 @@ const StackPuzzleGame = ({ route }) => {
   const { quizId, quizName } = route.params;
   const [pieces, setPieces] = useState([]);
   const [selectedPiece, setSelectedPiece] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(120);
   const [gameOver, setGameOver] = useState(false);
   const [puzzleImage, setPuzzleImage] = useState(null);
+  const [puzzleScore, setPuzzleScore] = useState(10);
+  const [gameStarted, setGameStarted] = useState(false);
+  const { updateTotalScore } = useAppContext();
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    const puzzle = puzzleData.find(p => p.id === quizId);
-    if (puzzle) {
-      setPuzzleImage(puzzle.image);
-      createPuzzlePieces();
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(timer);
-          setGameOver(true);
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [quizId]);
-
-  const createPuzzlePieces = () => {
+  const createPuzzlePieces = useCallback(() => {
     const numRows = 4;
     const numCols = 3;
     const newPieces = [];
@@ -58,8 +43,47 @@ const StackPuzzleGame = ({ route }) => {
       });
     }
 
-    setPieces(shuffleArray([...newPieces]));
-  };
+    return shuffleArray([...newPieces]);
+  }, []);
+
+  useEffect(() => {
+    const puzzle = puzzleData.find(p => p.id === quizId);
+    if (puzzle) {
+      setPuzzleImage(puzzle.image);
+      setPieces(createPuzzlePieces());
+      setGameStarted(true);
+    }
+  }, [quizId, createPuzzlePieces]);
+
+  useEffect(() => {
+    let timer;
+    let scoreTimer;
+
+    if (gameStarted && !gameOver) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            clearInterval(scoreTimer);
+            setGameOver(true);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      scoreTimer = setInterval(() => {
+        if (timeLeft <= 90) {
+          setPuzzleScore((prevScore) => Math.max(prevScore - 1, 0));
+        }
+      }, 10000);
+    }
+
+    return () => {
+      clearInterval(timer);
+      clearInterval(scoreTimer);
+    };
+  }, [gameStarted, gameOver, timeLeft]);
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -79,18 +103,18 @@ const StackPuzzleGame = ({ route }) => {
   };
 
   const swapPieces = (index1, index2) => {
-    setPieces((prevPieces) => {
-      const newPieces = [...prevPieces];
-      [newPieces[index1], newPieces[index2]] = [
-        newPieces[index2],
-        newPieces[index1],
-      ];
-      return newPieces;
-    });
+    const newPieces = [...pieces];
+    [newPieces[index1], newPieces[index2]] = [newPieces[index2], newPieces[index1]];
+    setPieces(newPieces);
   };
 
   const isPuzzleSolved = () => {
-    return pieces.every((piece, index) => piece.id === index);
+    const solved = pieces.every((piece, index) => piece.id === index);
+    if (solved && !gameOver) {
+      setGameOver(true);
+      updateTotalScore((prevScore) => prevScore + puzzleScore);
+    }
+    return solved;
   };
 
   const formatTime = (seconds) => {
@@ -99,12 +123,27 @@ const StackPuzzleGame = ({ route }) => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const handleReturnToMap = () => {
+    navigation.navigate('TabNavigator', { screen: 'Quiz' });
+  };
+
+  if (!gameStarted) {
+    return (
+      <AppLayout blur={10}>
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.loadingText}>Loading puzzle...</Text>
+        </SafeAreaView>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout blur={10}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.quizName}>{quizName} Puzzle</Text>
-        <View style={styles.timerContainer}>
+        <View style={styles.infoContainer}>
           <Text style={styles.timerText}>Time left: {formatTime(timeLeft)}</Text>
+          <Text style={styles.scoreText}>Potential Score: {puzzleScore}</Text>
         </View>
         {puzzleImage && (
           <View style={styles.puzzleContainer}>
@@ -139,6 +178,10 @@ const StackPuzzleGame = ({ route }) => {
         {isPuzzleSolved() && (
           <View style={styles.overlayContainer}>
             <Text style={styles.overlayText}>Puzzle Solved!</Text>
+            <Text style={styles.overlayText}>You earned {puzzleScore} points!</Text>
+            <TouchableOpacity style={styles.returnButton} onPress={handleReturnToMap}>
+              <Text style={styles.returnButtonText}>Return to Map</Text>
+            </TouchableOpacity>
           </View>
         )}
         {gameOver && !isPuzzleSolved() && (
@@ -146,6 +189,9 @@ const StackPuzzleGame = ({ route }) => {
             <Text style={styles.overlayText}>
               Unfortunately, time is over. Try next time!
             </Text>
+            <TouchableOpacity style={styles.returnButton} onPress={handleReturnToMap}>
+              <Text style={styles.returnButtonText}>Return to Map</Text>
+            </TouchableOpacity>
           </View>
         )}
       </SafeAreaView>
@@ -207,6 +253,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  scoreText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  returnButton: {
+    backgroundColor: '#F1BF00',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  returnButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
