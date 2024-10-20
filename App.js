@@ -1,5 +1,5 @@
-import React from 'react';
-import { Image, View, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { Image, View, Platform, AppState } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +14,10 @@ import {
   TabUserScreen,
 } from './screen/TAB';
 import { StackPuzzleGame, StackQuizGamePlay } from './screen/STACK';
+import {
+  playBackgroundMusic,
+  resetPlayer,
+} from './components/bgSound/setupPlayer';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -98,6 +102,30 @@ const TabNavigator = () => {
 };
 
 function App() {
+  useEffect(() => {
+    const initializePlayer = async () => {
+      try {
+        await playBackgroundMusic();
+      } catch (error) {
+        console.error('Error initializing player:', error);
+      }
+    };
+
+    initializePlayer();
+
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        resetPlayer();
+      } else if (nextAppState === 'active') {
+        playBackgroundMusic();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+      resetPlayer();
+    };
+  }, []);
   return (
     <AppContextProvider>
       <NavigationContainer>

@@ -52,7 +52,7 @@ export const setupPlayer = async () => {
 
       await TrackPlayer.add({
         id: 'backgroundMusic',
-        url: require('../assets/bgSound/flamenco.mp3'),
+        url: require('../../assets/bgSound/flamenco.mp3'),
         title: 'Background Music',
         artist: 'Your App',
       });
@@ -80,7 +80,7 @@ export const playBackgroundMusic = async () => {
       await TrackPlayer.reset();
       await TrackPlayer.add({
         id: 'backgroundMusic',
-        url: require('../assets/bgSound/flamenco.mp3'),
+        url: require('../../assets/bgSound/flamenco.mp3'),
         title: 'Background Music',
         artist: 'Your App',
       });
@@ -93,7 +93,7 @@ export const playBackgroundMusic = async () => {
     await setupPlayer();
     await TrackPlayer.add({
       id: 'backgroundMusic',
-      url: require('../assets/bgSound/flamenco.mp3'),
+      url: require('../../assets/bgSound/flamenco.mp3'),
       title: 'Background Music',
       artist: 'Your App',
     });

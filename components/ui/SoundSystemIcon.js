@@ -1,13 +1,14 @@
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 
 
-const SoundSystemIcon = ({ isActive }) => {
+const SoundSystemIcon = ({ isPlay }) => {
   return (
     <View
       style={[
         styles.harpContainer,
         {
-          backgroundColor: isPlay ? '#FF1493' : '#00FFFF',
+        //   backgroundColor: isPlay ? '#F1BF00' : '#AA151B',
+          backgroundColor: isPlay ? '#AA151B' : '#F1BF00',
           padding: 10,
           borderRadius: 50,
         },
@@ -16,7 +17,7 @@ const SoundSystemIcon = ({ isActive }) => {
       <Image
         
         source={require('../../assets/icons/soundIcon/flamenco.png')}
-        style={[styles.harpImage, { width: 60, height: 60, borderRadius: 30 }]}
+        style={[styles.harpImage, { width: 90, height: 90, borderRadius: 45 }]}
         resizeMode="contain"
       />
     </View>

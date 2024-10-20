@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { usePlaybackState } from 'react-native-track-player';
+// import { usePlaybackState } from 'react-native-track-player';
 import { toggleBackgroundMusic } from './setupPlayer';
 import SoundSystemIcon from '../ui/SoundSystemIcon';
 
 const ControlSystem = () => {
   const [playSound, setPlaySound] = useState(false);
-  const playbackState = usePlaybackState();
+//   const playbackState = usePlaybackState();
 
   const soundToggleControl = async () => {
     await toggleBackgroundMusic();
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
     position: 'absolute',
-    top: 60,
+    // top: 60,
     right: 80,
+    bottom: '15%',
   },
 });
