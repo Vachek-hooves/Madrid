@@ -112,7 +112,7 @@ const StackPuzzleGame = ({ route }) => {
     const solved = pieces.every((piece, index) => piece.id === index);
     if (solved && !gameOver) {
       setGameOver(true);
-      updateTotalScore((prevScore) => prevScore + puzzleScore);
+      updateTotalScore(puzzleScore);
     }
     return solved;
   };

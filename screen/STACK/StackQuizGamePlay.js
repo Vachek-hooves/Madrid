@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const StackQuizGamePlay = ({ route }) => {
   const { quizId } = route.params;
-  const { quizzes, updateQuizData, totalScore, updateTotalScore } = useAppContext();
+  const { quizzes, updateQuizScore } = useAppContext();
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -17,56 +17,47 @@ const StackQuizGamePlay = ({ route }) => {
 
   useEffect(() => {
     const quiz = quizzes.find(q => q.id === quizId);
-    setCurrentQuiz(quiz);
+    if (quiz) {
+      setCurrentQuiz(quiz);
+    }
   }, [quizId, quizzes]);
-
-  if (!currentQuiz) {
-    return (
-      <AppLayout>
-        <View style={styles.container}>
-          <Text>Loading quiz...</Text>
-        </View>
-      </AppLayout>
-    );
-  }
-
-  const currentQuestion = currentQuiz.questions[currentQuestionIndex];
 
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer);
-    if (answer === currentQuestion.answer) {
-      setScore(score + 1);
+    if (answer === currentQuiz.questions[currentQuestionIndex].answer) {
+      setScore(prevScore => prevScore + 1);
     }
   };
 
   const handleNextQuestion = () => {
-    setSelectedAnswer(null);
     if (currentQuestionIndex < currentQuiz.questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+      setSelectedAnswer(null);
     } else {
       setQuizCompleted(true);
-      const newScore = score + 1;
-      const updatedQuizzes = quizzes.map(q => 
-        q.id === quizId ? { ...q, score: newScore } : q
-      );
-      updateQuizData(updatedQuizzes);
-      updateTotalScore(totalScore + newScore);
+      updateQuizScore(quizId, score + 1);
     }
   };
 
-  const getOptionStyle = (option) => {
-    if (selectedAnswer === null) return ['#F1BF00', '#D68A00'];
-    if (option === currentQuestion.answer) return ['#4CAF50', '#45a049'];
-    if (option === selectedAnswer) return ['#f44336', '#d32f2f'];
-    return ['#F1BF00', '#D68A00'];
+  const handlePlayPuzzle = () => {
+    navigation.navigate('StackPuzzleGame', { quizId: currentQuiz.id, quizName: currentQuiz.name });
   };
 
   const handleReturnToMap = () => {
     navigation.navigate('TabNavigator', { screen: 'Quiz' });
   };
 
-  const handlePlayPuzzle = () => {
-    navigation.navigate('StackPuzzleGame', { quizId: currentQuiz.id, quizName: currentQuiz.name });
+  if (!currentQuiz) {
+    return <Text>Loading...</Text>;
+  }
+
+  const currentQuestion = currentQuiz.questions[currentQuestionIndex];
+
+  const getOptionStyle = (option) => {
+    if (selectedAnswer === null) return ['#F1BF00', '#D68A00'];
+    if (option === currentQuestion.answer) return ['#4CAF50', '#45a049'];
+    if (option === selectedAnswer) return ['#f44336', '#d32f2f'];
+    return ['#F1BF00', '#D68A00'];
   };
 
   if (quizCompleted) {
@@ -80,20 +71,9 @@ const StackQuizGamePlay = ({ route }) => {
         >
           <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-              <Text style={styles.quizName}>{currentQuiz.name} Completed!</Text>
-              <Text style={styles.score}>Final Score: {score} / {currentQuiz.questions.length}</Text>
-              <Text style={styles.resultText}>Correct Answers: {score}</Text>
-              <Text style={styles.resultText}>Incorrect Answers: {currentQuiz.questions.length - score}</Text>
-              <TouchableOpacity onPress={handleReturnToMap}>
-                <LinearGradient
-                  colors={['#F1BF00', '#D68A00']}
-                  style={styles.returnButton}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <Text style={styles.returnButtonText}>Return to Map</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+              <Text style={styles.quizName}>{currentQuiz.name}</Text>
+              <Text style={styles.completedText}>Quiz Completed!</Text>
+              <Text style={styles.scoreText}>Your Score: {score}/{currentQuiz.questions.length}</Text>
               <TouchableOpacity onPress={handlePlayPuzzle}>
                 <LinearGradient
                   colors={['#F1BF00', '#D68A00']}
@@ -102,6 +82,16 @@ const StackQuizGamePlay = ({ route }) => {
                   end={{ x: 1, y: 1 }}
                 >
                   <Text style={styles.puzzleButtonText}>Play Puzzle for More Score</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleReturnToMap}>
+                <LinearGradient
+                  colors={['#F1BF00', '#D68A00']}
+                  style={styles.returnButton}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.returnButtonText}>Return to Map</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </ScrollView>
@@ -138,7 +128,7 @@ const StackQuizGamePlay = ({ route }) => {
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                 >
-                  <Text style={styles.optionText}>{option}</Text>
+                  <Text style={[styles.optionText, selectedAnswer === option && styles.selectedOptionText]}>{option}</Text>
                 </LinearGradient>
               </TouchableOpacity>
             ))}
@@ -173,31 +163,31 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
-    padding: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 40,
+    padding: 20,
   },
   quizName: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
     color: 'white',
+    marginBottom: 20,
   },
   questionNumber: {
     fontSize: 18,
-    marginBottom: 10,
     color: 'white',
+    marginBottom: 10,
   },
   questionContainer: {
-    height: 100,
-    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 10,
+    padding: 20,
     marginBottom: 20,
   },
   question: {
-    fontSize: 20,
-    textAlign: 'center',
+    fontSize: 18,
     color: 'white',
+    textAlign: 'center',
   },
   optionButton: {
     padding: 15,
@@ -211,6 +201,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: 'white',
+    fontWeight: 'bold',
+  },
+  selectedOptionText: {
     fontWeight: 'bold',
   },
   nextButton: {
@@ -232,24 +225,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: 'white',
   },
-  resultText: {
-    fontSize: 18,
-    color: 'white',
-    marginBottom: 10,
-  },
-  returnButton: {
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
-    width: 300,
-    borderWidth: 2,
-    borderColor: 'white',
-  },
-  returnButtonText: {
-    color: 'white',
-    fontSize: 18,
+  completedText: {
+    fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
+    marginBottom: 20,
+    color: 'white',
+  },
+  scoreText: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: 'white',
   },
   puzzleButton: {
     padding: 15,
@@ -260,6 +245,20 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   puzzleButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  returnButton: {
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    width: 300,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+  returnButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
